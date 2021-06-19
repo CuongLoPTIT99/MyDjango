@@ -1,0 +1,23 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div>
+    <div class="grid-container">
+        {% for item in products %}
+        <div class="con2" style="border-radius: 10px">
+            <img class="thumbnail" src="{{item.image.url}}">
+            <div class="box-element product">
+                <h6 style="color: #c5681d"><strong>{{item.name}}</strong></h6>
+                <hr>
+                <button data-product="{{item.id}}" data-action="add" type="button" class="button-1 update-cart">Thêm Vào Giỏ</button>
+                <button type="button" class="button-1"><span>Xem</span></button>
+                <h5 style="display: inline-block;text-align: center; float: right"> {{item.price|floatformat:0}} đ</h5>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+
+
+</div>
+{% endblock content %}

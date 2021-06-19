@@ -1,0 +1,75 @@
+{% extends 'store/main1.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container" style="padding: 2rem 0rem;">
+    <div class="row">
+        <div class="col-12">
+            <h5><strong>Total Price : {{ orders.get_cart_total }} đ</strong></h5>
+            <a href="{% url 'ship' %}" style="margin-bottom: 20px; float: right" class="btn btn-outline-success"><i class="fa fa-check-square-o" aria-hidden="true"></i> Thanh Toan</a>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th style="text-align: center;" scope="col">Ten San Pham</th>
+                    <th style="text-align: center;" scope="col">Gia</th>
+                    <th style="text-align: center;" scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                <tr>
+                    <td style="text-align: center;">{{item.product.name}}</td>
+                    <td style="text-align: center;">{{item.product.price|floatformat:3}} đ</td>
+                    <td style="text-align: center;">
+                        <button data-action="delete" data-product="{{item.id}}" id="{{item.id}}" type="button" class="btn btn-danger delete-item"><i class="fa fa-trash-o"
+                                                                                                  aria-hidden="true"></i>Delete
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var deleteBtn = document.getElementsByClassName('delete-item')
+
+for (var i = 0; i < deleteBtn.length; i++) {
+    deleteBtn[i].addEventListener('click', function () {
+        var productId = this.dataset.product
+        var action = this.dataset.action
+        console.log('productId:', productId, 'action:', action)
+
+        console.log('USER:', user)
+        if (user === 'AnonymousUser') {
+            console.log("Not log in")
+        } else {
+            updateUserOrder1(productId, action)
+        }
+    })
+}
+
+function updateUserOrder1(productId, action) {
+    console.log("logg in")
+    var url = '/delete_item/'
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({'productId': productId, 'action': action})
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log("item is add")
+            document.location.reload()
+        });
+}
+
+</script>
+{% endblock content %}
